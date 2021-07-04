@@ -25,16 +25,16 @@ impl IsInitialized for Escrow {
 }
 
 impl Pack for Escrow {
-    const LEN: usize = 105;
+    const LEN: usize = 105; //1 (bool, use u8) + 3 * 32 (Pubkey) + 1 * 8 (u64) = 105
     fn unpack_from_slice(src: &[u8]) -> Result<Self, ProgramError> {
-        let src = array_ref![src, 0, Escrow::LEN];
+        let src = array_ref![src, 0, Escrow::LEN]; //array exp, offset, len exp
         let (
             is_initialized,
             initializer_pubkey,
             temp_token_account_pubkey,
             initializer_token_to_receive_account_pubkey,
             expected_amount,
-        ) = array_refs![src, 1, 32, 32, 32, 8];
+        ) = array_refs![src, 1, 32, 32, 32, 8]; //setting by usize above
         let is_initialized = match is_initialized {
             [0] => false,
             [1] => true,

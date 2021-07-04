@@ -74,7 +74,10 @@ impl Processor {
         //https://docs.rs/solana-program/1.4.17/solana_program/pubkey/struct.Pubkey.html#method.find_program_address
         let (pda, _bump_seed) = Pubkey::find_program_address(&[b"escrow"], program_id);
 
-        //then invoke transfer cross programs...
+        //then invoke transfer cross programs...https://docs.solana.com/developing/programming-model/calling-between-programs#cross-program-invocations\
+        //important to note that the cross program invocation is not a transaction, it is a message
+        //on top of that, the invoking program is halted until the invoked program finishes processing the instruction
+        //original sender signature is forwarded along
         let token_program = next_account_info(account_info_iter)?;
         let owner_change_ix = spl_token::instruction::set_authority(
             token_program.key,
